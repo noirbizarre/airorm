@@ -63,31 +63,31 @@ package info.noirbizarre.airorm
 		 */ 
 		public function getJoinTable(obj1:Object, prop1:String, obj2:Object, prop2:String):String
 		{
-			var leftPart:String;
-			var rightPart:String;
+			var part1:String;
+			var part2:String;
 			
 			if (obj1 is String) { 
 				//It must be a class name
-				leftPart = (obj1 as String) + "_" + prop1;
+				part1 = (obj1 as String) + "_" + prop1;
 			} else if (obj1 is ActiveRecord) {
-				leftPart = obj1.className + "_" + prop1;
+				part1 = obj1.className + "_" + prop1;
 			} else if (obj1 is Class) {
-				leftPart = Reflection.getShortClassName(obj1) + "_" + prop1;
+				part1 = Reflection.getShortClassName(obj1) + "_" + prop1;
 			}  else {
 				throw new AOError("Unhandled object type " + getQualifiedClassName(obj1));
 			}
 			
 			if (obj2 is String) { 
 				//It must be a class name
-				rightPart = (obj2 as String) + "_" + prop2;
+				part2 = (obj2 as String) + "_" + prop2;
 			} else if (obj2 is ActiveRecord) {
-				rightPart = obj2.className + "_" + prop2;
+				part2 = obj2.className + "_" + prop2;
 			} else if (obj2 is Class) {
-				rightPart = Reflection.getShortClassName(obj2) + "_" + prop2;
+				part2 = Reflection.getShortClassName(obj2) + "_" + prop2;
 			} else {
 				throw new AOError("Unhandled object type " + getQualifiedClassName(obj2));
 			}
-			return leftPart + "__" + rightPart;
+			return (part1 < part2) ? part1 + "__" + part2 : part2 + "__" + part1;
 		}
 		
 		/**
