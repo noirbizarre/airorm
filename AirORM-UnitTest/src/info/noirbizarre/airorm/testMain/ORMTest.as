@@ -4,6 +4,7 @@ package info.noirbizarre.airorm.testMain
 	import flash.data.SQLConnection;
 	import flash.data.SQLTableSchema;
 	import flash.filesystem.File;
+	import flash.system.Capabilities;
 	
 	import info.noirbizarre.airorm.ORM;
 	import info.noirbizarre.airorm.testData.Employee;
@@ -31,7 +32,10 @@ package info.noirbizarre.airorm.testMain
 		override protected function tearDown():void {
 			DB.clear(conn);
 			conn.close();
-			dbFile.deleteFile();
+			if (Capabilities.os.substr(0, 3).toLowerCase() != "win") {
+			 	// Crash on windows
+				dbFile.deleteFile();
+			}
 		}
 		
 		public function testUpdateTableSimple():void {

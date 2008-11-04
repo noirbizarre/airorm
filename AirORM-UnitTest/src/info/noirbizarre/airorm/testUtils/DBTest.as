@@ -3,8 +3,8 @@ package info.noirbizarre.airorm.testUtils
 	import flash.data.SQLConnection;
 	import flash.data.SQLSchemaResult;
 	import flash.data.SQLStatement;
-	import flash.events.SQLEvent;
 	import flash.filesystem.File;
+	import flash.system.Capabilities;
 	
 	import info.noirbizarre.airorm.AOError;
 	import info.noirbizarre.airorm.utils.DB;
@@ -20,7 +20,10 @@ package info.noirbizarre.airorm.testUtils
 		}
 		
 		override protected function tearDown():void {
-			dbFile.deleteFile();
+			 if (Capabilities.os.substr(0, 3).toLowerCase() != "win") {
+			 	// Crash on windows
+				dbFile.deleteFile();
+			 }
 		} 
 		
 		public function testGetConnection():void {

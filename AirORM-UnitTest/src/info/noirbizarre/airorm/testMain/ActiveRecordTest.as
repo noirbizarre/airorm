@@ -3,6 +3,7 @@ package info.noirbizarre.airorm.testMain
 	import flash.data.SQLConnection;
 	import flash.data.SQLStatement;
 	import flash.filesystem.File;
+	import flash.system.Capabilities;
 	
 	import info.noirbizarre.airorm.ORM;
 	import info.noirbizarre.airorm.testData.Employee;
@@ -11,8 +12,6 @@ package info.noirbizarre.airorm.testMain
 	import info.noirbizarre.airorm.testData.SimpleActiveRecord;
 	import info.noirbizarre.airorm.testData.Task;
 	import info.noirbizarre.airorm.utils.DB;
-	
-	import mx.collections.ArrayCollection;
 	
 	import net.digitalprimates.fluint.tests.TestCase;
 	
@@ -35,7 +34,10 @@ package info.noirbizarre.airorm.testMain
 			var conn:SQLConnection = DB.getConnection("main", true);
 			DB.clear(conn);
 			conn.close();
-			dbFile.deleteFile();
+			if (Capabilities.os.substr(0, 3).toLowerCase() != "win") {
+			 	// Crash on windows
+				dbFile.deleteFile();
+			}
 		}
 		
 		public function testConstructor():void {

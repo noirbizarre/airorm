@@ -2,6 +2,7 @@ package info.noirbizarre.airorm.testMain
 {
 	import flash.data.SQLConnection;
 	import flash.filesystem.File;
+	import flash.system.Capabilities;
 	
 	import info.noirbizarre.airorm.AOError;
 	import info.noirbizarre.airorm.ORM;
@@ -35,7 +36,10 @@ package info.noirbizarre.airorm.testMain
 			var conn:SQLConnection = DB.getConnection("main", true);
 			DB.clear(conn);
 			conn.close();
-			dbFile.deleteFile();
+			if (Capabilities.os.substr(0, 3).toLowerCase() != "win") {
+			 	// Crash on windows
+				dbFile.deleteFile();
+			}
 		}
 		
 		public function testConstructorFromClass():void {
