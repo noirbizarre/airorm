@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<project name="AirORM" default="build-swc" basedir=".">
+	
+	<target name="check-local"
+		description="Check presence of local.properties">
+		<available file="local.properties" property="local.present" />
+	</target>
+	
+	<target name="local-init" depends="check-local" if="local.present"
+		description="Load local.properties">
+	    <echo level="info" message="Loading local properties file"/>
+		<property file="${basedir}/local.properties"/>
+	</target>
+	
+	<target name="init" depends="local-init"
+		description="Initiliaze variables">
+		<tstamp />
+	    <echo level="info" message="Loading build properties file"/>
+		<property file="${basedir}/build.properties"/>
+		
+		<!-- Flex/AIR SDK Variables -->
+		<taskdef resource="flexTasks.tasks" classpath="${ant.library.dir}/flexTasks.jar" />
+		<property name="FLEX_HOME" value="${dir.sdk}" />
+	</target>
+	
+	<target name="asdoc" depends="init-asdoc"
+		description="ASDoc generation">
+		
+		<echo level="info" message="Generating ASDoc"/>
+		
+		<!-- runs the ASDoc compiler on the source -->
+		<exec executable="${bin.asdoc}" failonerror="true" >
+			<arg line="-doc-sources '${dir.src}'" />
+			<arg line="-output '${dir.doc}'" />
+			<arg line="-load-config '${dir.frameworks}/air-config.xml'" />
+			<arg line="-library-path '${dir.frameworks}/libs'" />
+			<arg line="-library-path '${dir.frameworks}/libs/air'" />
+		</exec>
+	</target>
+	
+	<target name="build-swc" depends="init-swc"
+		description="Compile the SWC file">
+			
+		<echo level="info" message="Compiling SWC file"/>	
+		
+		<!-- Invoke compiler -->
+		<compc output="${dir.build}/${output.filename}">
+			
+			<!-- Load SDK libraries -->
+			<load-config  filename="${dir.frameworks}/air-config.xml" />
+			<compiler.library-path dir="${dir.frameworks}/libs" append="true" includes="*.swc" />
+			<compiler.library-path dir="${dir.frameworks}/libs/air" append="true" includes="*.swc" />
+			
+            <!-- include AirORM into the build -->
+			<source-path path-element="${dir.src}" />
+            <include-sources dir="${dir.src}" includes="*" />
+			
+			<!-- Keep necessary metadata. This option will be added to all projects using this library -->
+			<keep-as3-metadata name="HasMany" />
+			<keep-as3-metadata name="ManyToMany" />
+			<keep-as3-metadata name="BelongsTo" />
+			<keep-as3-metadata name="HasOne" />
+			<keep-as3-metadata name="NotPersisted" />
+			<keep-as3-metadata name="Timestamp" />
+        </compc>
+	</target>
+	
+	<target name="init-asdoc" depends="init"
+		description="Initialize ASDoc target directory">
+		
+		<!-- Initialize doc directory -->
+		<mkdir dir="${dir.doc}"/>
+		
+		<!-- Clean out the contents of the doc directory, without deleting "docs" -->
+		<delete includeemptydirs="true">
+			<fileset dir="${dir.doc}" includes="**/*" />
+		</delete>
+	</target>
+	
+	<target name="init-swc" depends="init"
+		description="Initialize SWC build directory">
+		
+		<!-- Initialize build directory -->
+		<mkdir dir="${dir.build}"/>
+		
+		<!-- Clean out the contents of the build directory, without deleting "docs" -->
+		<delete includeemptydirs="true">
+			<fileset dir="${dir.doc}" includes="**/*" />
+		</delete>
+	</target>
+	
+	<target name="clean"
+		description="Delete directories created">
+		<echo level="info" message="Deleting directories" />
+		<delete dir="${dir.doc}" />
+		<delete dir="${dir.build}" />
+	</target>
+	
+</project>

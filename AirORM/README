@@ -1,0 +1,15 @@
+TODO: To complete
+
+DEPENDANCIES
+---------------------------------
+This build file depends on Ant Flex Task (flexTasks.jar).
+You must copy it into your ant library folder.
+You can grab it into the ant/lib folder from the Flex SDK.
+
+USAGE
+---------------------------------
+You must override default values from build.properties into your own local.properties.
+DO NOT COMIT local.properties.
+
+To build the SWC library you must execute the 'build-swc' target.
+To generate the ASDoc you must execute the 'asdoc' target.

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties version="1">
+  <includeClasses>
+    <classEntry path="info.noirbizarre.airorm.utils.Inflector"/>
+    <classEntry path="info.noirbizarre.airorm.utils.sql_db"/>
+    <classEntry path="info.noirbizarre.airorm.utils.Reflection"/>
+    <classEntry path="info.noirbizarre.airorm.ActiveRecordEvent"/>
+    <classEntry path="info.noirbizarre.airorm.ORM"/>
+    <classEntry path="info.noirbizarre.airorm.AOError"/>
+    <classEntry path="info.noirbizarre.airorm.SchemaTranslation"/>
+    <classEntry path="info.noirbizarre.airorm.RelationalOperation"/>
+    <classEntry path="info.noirbizarre.airorm.ActiveRecord"/>
+    <classEntry path="info.noirbizarre.airorm.utils.DB"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
