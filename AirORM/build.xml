@@ -19,7 +19,7 @@
 		<property file="${basedir}/build.properties"/>
 		
 		<!-- Flex/AIR SDK Variables -->
-		<taskdef resource="flexTasks.tasks" classpath="${ant.library.dir}/flexTasks.jar" />
+		<taskdef resource="flexTasks.tasks" classpath="${dir.sdk}/ant/lib/flexTasks.jar" />
 		<property name="FLEX_HOME" value="${dir.sdk}" />
 	</target>
 	
@@ -85,7 +85,7 @@
 		
 		<!-- Clean out the contents of the build directory, without deleting "docs" -->
 		<delete includeemptydirs="true">
-			<fileset dir="${dir.doc}" includes="**/*" />
+			<fileset dir="${dir.build}" includes="**/*" />
 		</delete>
 	</target>
 	
