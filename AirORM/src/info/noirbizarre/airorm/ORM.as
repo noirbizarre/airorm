@@ -145,9 +145,6 @@ package info.noirbizarre.airorm
 					stmt.execute();
 				}
 			}
-			
-			if (conn.inTransaction)
-				conn.commit();
 				
 			//Check join tables
 			var joinVars:XMLList = Reflection.getMetadata(obj, "ManyToMany");
@@ -159,8 +156,7 @@ package info.noirbizarre.airorm
 				var objFK:String = ActiveRecord.schemaTranslation.getForeignKey(obj);
 				var otherFK:String = ActiveRecord.schemaTranslation.getForeignKey(other);
 				var otherProp:String = field.arg.(@key == "property").@value; 
-				tableName = ActiveRecord.schemaTranslation.getJoinTable(obj, prop, other, otherProp); 
-				conn.begin();
+				tableName = ActiveRecord.schemaTranslation.getJoinTable(obj, prop, other, otherProp);
 				sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (" + objFK + " INTEGER, " + otherFK + " INTEGER)";
 				stmt.text = sql;
 				stmt.execute();
