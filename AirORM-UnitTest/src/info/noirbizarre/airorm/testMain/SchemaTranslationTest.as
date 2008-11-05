@@ -1,6 +1,6 @@
 package info.noirbizarre.airorm.testMain
 {
-	import net.digitalprimates.fluint.tests.TestCase;
+	import flash.utils.getQualifiedClassName;
 	
 	import info.noirbizarre.airorm.AOError;
 	import info.noirbizarre.airorm.SchemaTranslation;
@@ -8,6 +8,8 @@ package info.noirbizarre.airorm.testMain
 	import info.noirbizarre.airorm.testData.SimpleActiveRecord;
 	import info.noirbizarre.airorm.testData.SimpleClass;
 	import info.noirbizarre.airorm.testData.Task;
+	
+	import net.digitalprimates.fluint.tests.TestCase;
 
 	public class SchemaTranslationTest extends TestCase
 	{
@@ -40,6 +42,9 @@ package info.noirbizarre.airorm.testMain
 			assertEquals("Default foreign key should be 'simpleActiveRecord_id'","simpleActiveRecord_id",st.getForeignKey(simpleAR));
 			assertEquals("Default foreign key should be 'simpleActiveRecord_id'","simpleActiveRecord_id",st.getForeignKey(simpleAR.className));
 			assertEquals("Default foreign key should be 'simpleActiveRecord_id'","simpleActiveRecord_id",st.getForeignKey(SimpleActiveRecord));
+			assertEquals("Default foreign key should be 'simpleActiveRecord_id'","simpleActiveRecord_id",st.getForeignKey("SimpleActiveRecord"));
+			assertEquals("Default foreign key should be 'simpleActiveRecord_id'","simpleActiveRecord_id",st.getForeignKey("info.noirbizarre.airorm.testData.SimpleActiveRecord"));
+			assertEquals("Default foreign key should be 'simpleActiveRecord_id'","simpleActiveRecord_id",st.getForeignKey(getQualifiedClassName(SimpleActiveRecord)));
 			assertEquals("property foreign key should be 'employer_id'","employer_id",st.getForeignKey(emp,"employer"));
 			assertEquals("property foreign key should be 'employer_id'","employer_id",st.getForeignKey(emp.className,"employer"));
 			assertEquals("property foreign key should be 'employer_id'","employer_id",st.getForeignKey(Employee,"employer"));

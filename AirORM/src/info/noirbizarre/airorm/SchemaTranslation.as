@@ -47,7 +47,7 @@ package info.noirbizarre.airorm
 			} else {
 				if (obj is String) { 
 					//It must be a class name
-					return Inflector.lowerFirst(obj as String) + "_id";
+					return Inflector.lowerFirst(Reflection.getShortClassName(obj as String)) + "_id";
 				} else if (obj is ActiveRecord) {
 					return Inflector.lowerFirst(obj.className) + "_id";
 				} else if (obj is Class) {

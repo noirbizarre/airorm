@@ -83,7 +83,8 @@ package info.noirbizarre.airorm.utils
 		public static function getShortClassName(obj:Object):String {
 			var classParts:Array
 			if (obj is String) {
-				classParts = (obj as String).split("::");
+				var tmp:Array = (obj as String).split(".");
+				classParts = (tmp.pop() as String).split("::");
 			} else {
 				classParts = getQualifiedClassName(obj).split("::");
 			}

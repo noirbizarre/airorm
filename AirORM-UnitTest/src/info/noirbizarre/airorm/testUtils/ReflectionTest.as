@@ -78,6 +78,7 @@ package info.noirbizarre.airorm.testUtils
 			assertEquals("Should returns the last part of class name", "SimpleClass", Reflection.getShortClassName(new SimpleClass()));
 			assertEquals("Should returns the last part of class name", "SimpleClass", Reflection.getShortClassName(getQualifiedClassName(new SimpleClass())));
 			assertEquals("Should returns the last part of class name", "SimpleClass", Reflection.getShortClassName("SimpleClass"));
+			assertEquals("Should returns the last part of class name", "SimpleClass", Reflection.getShortClassName("info.noirbizarre.airorm.testData.SimpleClass"));
 		}
 		
 	}
