@@ -66,7 +66,7 @@ package info.noirbizarre.airorm
 			var foreignKeys:XMLList = Reflection.getMetadata(obj, "BelongsTo") + Reflection.getMetadata(obj, "HasOne");
 			for each (var fkDef:XML in foreignKeys) {
 				var otherClassName:String = fkDef.arg.(@key=="className")[0].@value;
-				var propName:String = fkDef.arg.(@key=="")[0].@name;
+				var propName:String = fkDef.arg.(@key=="")[0].@value;
 				var fk:XML = <variable type="uint" />;
 				fk.@name = ActiveRecord.schemaTranslation.getForeignKey(otherClassName, propName);
 				def.appendChild(fk);
@@ -102,6 +102,8 @@ package info.noirbizarre.airorm
 				schema = DB.getTableSchema(conn, tableName);
 			}
 			
+			conn.begin();
+			
 			// if no table was found, create it, otherwise, update any missing fields
 			if (!schema)
 			{
@@ -117,7 +119,6 @@ package info.noirbizarre.airorm
 					fields.push(fieldDef.join(" "));
 				}
 				
-				conn.begin();
 				sql = "CREATE TABLE " + tableName + " (" + fields.join(", ") + ")";
 				stmt.text = sql;
 				stmt.execute();
@@ -139,7 +140,6 @@ package info.noirbizarre.airorm
 					// add the field to be created
 					fieldDef = ["ADD", field.@name, dbTypes[field.@type]];
 					
-					conn.begin();
 					sql = "ALTER TABLE " + tableName + " " + fieldDef.join(" ");
 					stmt.text = sql;
 					stmt.execute();
@@ -157,7 +157,8 @@ package info.noirbizarre.airorm
 				var otherFK:String = ActiveRecord.schemaTranslation.getForeignKey(other);
 				var otherProp:String = field.arg.(@key == "property").@value; 
 				tableName = ActiveRecord.schemaTranslation.getJoinTable(obj, prop, other, otherProp);
-				sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (" + objFK + " INTEGER, " + otherFK + " INTEGER)";
+				sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (" + objFK + " INTEGER, " + otherFK + " INTEGER, ";
+				sql += "PRIMARY KEY (" + objFK + " , " + otherFK + "))";
 				stmt.text = sql;
 				stmt.execute();
 			}
