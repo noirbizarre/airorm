@@ -606,12 +606,29 @@ package info.noirbizarre.airorm
 			
 			var data:Object = {};
 			
+			// Build dynamicly generated foreign keys array 
+			var foreignKeys:XMLList = Reflection.getMetadata(this, "BelongsTo") + Reflection.getMetadata(this, "HasOne");
+			var dynamics:Object = {};
+			for each (var fkDef:XML in foreignKeys) {
+				var otherClassName:String = fkDef.arg.(@key=="className")[0].@value;
+				var propName:String = fkDef.arg.(@key=="")[0].@value;
+				var fk:String = ActiveRecord.schemaTranslation.getForeignKey(otherClassName, propName);
+				dynamics[fk] = propName;
+			}
+			
 			for each (var column:SQLColumnSchema in columns)
 			{
 				if (column.primaryKey)
 					data[column.name] = id;
 				else if (column.name in this)
 					data[column.name] = this[column.name];
+				else if (column.name in dynamics) {
+					var ar:ActiveRecord = getProperty(dynamics[column.name]);
+					if (ar)
+						data[column.name] = ar.id;
+					else
+						data[column.name] = null;
+				}
 			}
 			
 			return data;
