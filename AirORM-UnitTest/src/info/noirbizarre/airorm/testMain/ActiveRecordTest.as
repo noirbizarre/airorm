@@ -12,8 +12,13 @@ package info.noirbizarre.airorm.testMain
 	import info.noirbizarre.airorm.testData.SimpleActiveRecord;
 	import info.noirbizarre.airorm.testData.Task;
 	import info.noirbizarre.airorm.utils.DB;
+	import info.noirbizarre.airorm.utils.sql_db;
+	
+	import mx.collections.ArrayCollection;
 	
 	import net.digitalprimates.fluint.tests.TestCase;
+	
+	use namespace sql_db;
 	
 	public class ActiveRecordTest extends TestCase
 	{
@@ -83,6 +88,40 @@ package info.noirbizarre.airorm.testMain
 			s.myInt = 5;
 			s.myDate = new Date();
 			s.save()
+			stmt.execute();
+			data = stmt.getResult().data;
+			assertEquals("Should have only one result",1,data.length);
+			assertEquals("Test",data[0]["myString"]);
+			assertEquals(true,data[0]["myBool"]);
+			assertEquals(5,data[0]["myInt"]);
+			assertNotNull(data[0]["myDate"]);
+			assertNotNull(data[0]["modified"]);
+			assertNotNull(data[0]["created"]);
+			
+			var employer:Employer = new Employer();
+			employer.save();
+			var employee:Employee = new Employee();
+			employee.employer = employer;
+			employee.save();
+			stmt.text = "select * from Employees where id="+employee.id;
+			stmt.execute();
+			data = stmt.getResult().data;
+			assertEquals(employer.id, data[0]["employer_id"]);
+			
+			var secretary:Secretary = new Secretary();
+			secretary.save();
+			employer.secretary = secretary;
+			employer.save();
+			stmt.text = "select * from Employers where id="+employer.id;
+			stmt.execute();
+			data = stmt.getResult().data;
+			assertEquals(secretary.id, data[0]["secretary_id"]);
+			secretary.employer = employer;
+			secretary.save();
+			stmt.text = "select * from Secretaries where id="+secretary.id;
+			stmt.execute();
+			data = stmt.getResult().data;
+			assertEquals(employer.id, data[0]["employer_id"]);
 		}
 		
 		public function testLoad():void {
@@ -207,7 +246,74 @@ package info.noirbizarre.airorm.testMain
 		}
 		
 		public function testDBProperties():void {
-			fail("No test implemented");
+			var s:SimpleActiveRecord = new SimpleActiveRecord();
+			var res:Object = s.getDBProperties();
+			var columns:ArrayCollection = new ArrayCollection();
+			var col:String;
+			for (col in res) {
+				columns.addItem(col);
+			}
+			assertTrue("id column should exists", columns.contains("id"));
+			assertTrue("myString column should exists", columns.contains("myString"));
+			assertTrue("myBool column should exists", columns.contains("myBool"));
+			assertTrue("myInt column should exists", columns.contains("myInt"));
+			assertTrue("myDate column should exists", columns.contains("myDate"));
+			assertTrue("modified column should exists", columns.contains("modified"));
+			assertTrue("created column should exists", columns.contains("created"));
+			assertFalse("connection should not exists", columns.contains("connection"));
+			assertFalse("uid should not exists", columns.contains("uid"));
+			assertFalse("notPersisted should not exists", columns.contains("notPersisted"));
+			
+			var employee:Employee = new Employee();
+			res = employee.getDBProperties();
+			columns = new ArrayCollection();
+			for (col in res) {
+				columns.addItem(col);
+			}
+			assertTrue("id column should exists", columns.contains("id"));
+			assertTrue("name column should exists", columns.contains("name"));
+			assertTrue("position column should exists", columns.contains("position"));
+			assertTrue("hireDate column should exists", columns.contains("hireDate"));
+			assertTrue("salary column should exists", columns.contains("salary"));
+			assertFalse("connection should not exists", columns.contains("connection"));
+			assertFalse("uid should not exists", columns.contains("uid"));
+			assertTrue("employer_id column should exists", columns.contains("employer_id"));
+			
+			var employer:Employer = new Employer();
+			res = employer.getDBProperties();
+			columns = new ArrayCollection();
+			for (col in res) {
+				columns.addItem(col);
+			}
+			assertTrue("id column should exists", columns.contains("id"));
+			assertTrue("name column should exists", columns.contains("name"));
+			assertFalse("connection should not exists", columns.contains("connection"));
+			assertFalse("uid should not exists", columns.contains("uid"));
+			assertTrue("secretary_id column should exists", columns.contains("secretary_id"));
+			assertFalse("employees_id column should not exists", columns.contains("employees_id"));
+			
+			var secretary:Secretary = new Secretary();
+			res = secretary.getDBProperties();
+			columns = new ArrayCollection();
+			for (col in res) {
+				columns.addItem(col);
+			}
+			assertTrue("id column should exists", columns.contains("id"));
+			assertTrue("name column should exists", columns.contains("name"));
+			assertFalse("connection should not exists", columns.contains("connection"));
+			assertFalse("uid should not exists", columns.contains("uid"));
+			assertTrue("employer_id column should exists", columns.contains("employer_id"));
+			
+			var task:Task = new Task();
+			res = task.getDBProperties();
+			columns = new ArrayCollection();
+			for (col in res) {
+				columns.addItem(col);
+			}
+			assertTrue("id column should exists", columns.contains("id"));
+			assertTrue("name column should exists", columns.contains("name"));
+			assertFalse("connection should not exists", columns.contains("connection"));
+			assertFalse("uid should not exists", columns.contains("uid"));
 		}
 		
 		public function testGetSchema():void {

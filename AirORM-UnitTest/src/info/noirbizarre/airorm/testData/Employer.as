@@ -5,7 +5,7 @@ package info.noirbizarre.airorm.testData
 	import mx.collections.ArrayCollection;
 	
 	
-	[HasOne("secretary",className="Secretary")];
+	[HasOne("secretary",className="Secretary")]
 	[HasMany("employees", className="Employee")]
 	public dynamic class Employer extends ActiveRecord
 	{
