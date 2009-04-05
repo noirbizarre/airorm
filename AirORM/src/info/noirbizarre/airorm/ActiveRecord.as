@@ -509,10 +509,12 @@ package info.noirbizarre.airorm
 			stmt.text = sql;
 			
 			if (params.length == 1 && params[0] is Array)
-				params = params[0];
+				params = params[0];	
 			
-			for (var i:int = 0; i < params.length; i++)
-				stmt.parameters[i] = params[i];
+			if (params is Array) {
+				for (var i:int = 0; i < params.length; i++)
+					stmt.parameters[i] = params[i];	
+			}
 			
 			stmt.execute();
 			var result:SQLResult = stmt.getResult();
