@@ -9,6 +9,7 @@ package info.noirbizarre.airorm
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.events.SQLErrorEvent;
 	import flash.events.SQLEvent;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
@@ -243,6 +244,15 @@ package info.noirbizarre.airorm
 		public function findBySQL(sql:String, ...params:Array):Array
 		{
 			return loadItems(constructor as Class, sql, params);
+		}
+		
+				/**
+		 * Returns array of objects based on the full sql statement
+		 * without parameters
+		 */
+		public function findBySQLWithoutParams(sql:String):Array
+		{
+			return loadItemsWithoutParams(constructor as Class, sql);
 		}
 		
 		/**
@@ -563,6 +573,24 @@ package info.noirbizarre.airorm
 			return result ? result.data : null;
 		}
 		
+		sql_db function loadItemsWithoutParams(clazz:Class, sql:String):Array
+		{
+			var stmt:SQLStatement = new SQLStatement();
+			stmt.sqlConnection = connection;
+			stmt.text = sql;
+			stmt.itemClass = clazz;
+			stmt.addEventListener(SQLErrorEvent.ERROR, queryErrorHandler);
+			stmt.execute();
+			var result:SQLResult = stmt.getResult();
+			
+			return result ? result.data : null;
+		}
+		
+		private function queryErrorHandler(event:SQLErrorEvent):void { 
+	        var err:String = "Query Error id: " + event.error.errorID + "\nDetails:" +
+	                         event.error.message;           
+	    }
+	      
 		sql_db function assembleQuery(conditions:String = null, order:String = null, limit:uint = 0, offset:uint = 0, joins:String = null):String
 		{
 			var sql:String = "";
