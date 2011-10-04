@@ -32,8 +32,8 @@
   
   <properties>
   	<flexsdk.version>4.5.1.21328</flexsdk.version>
-  	<flexunit.version>4.1</flexunit.version>
-  	<flexmojos.version>4.0-rc2</flexmojos.version>
+  	<flexunit.version>4.1.0</flexunit.version>
+  	<flexmojos.version>4.0-RC2</flexmojos.version>
   </properties>
   
   <build>
@@ -66,10 +66,39 @@
   		<version>${flexsdk.version}</version>
   		<type>pom</type>
   	</dependency>
+  	<!-- Test dependencies -->
   	<dependency>
-  		<groupId>org.sonatype.flexmojos</groupId>
-  		<artifactId>flexmojos-unittest-support</artifactId>
-  		<version>${flexmojos.version}</version>
+  		<groupId>org.flexunit</groupId>
+  		<artifactId>flexunit</artifactId>
+  		<version>${flexunit.version}</version>
+  		<type>swc</type>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.flexunit</groupId>
+  		<artifactId>flexunit-uilistener</artifactId>
+  		<version>${flexunit.version}</version>
+  		<type>swc</type>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.flexunit</groupId>
+  		<artifactId>flexunit-cilistener</artifactId>
+  		<version>${flexunit.version}</version>
+  		<type>swc</type>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.flexunit</groupId>
+  		<artifactId>flexunit-aircilistener</artifactId>
+  		<version>${flexunit.version}</version>
+  		<type>swc</type>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.flexunit</groupId>
+  		<artifactId>flexunit-flexcoverlistener</artifactId>
+  		<version>${flexunit.version}</version>
   		<type>swc</type>
   		<scope>test</scope>
   	</dependency>
