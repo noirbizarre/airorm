@@ -1,5 +1,8 @@
 local.properties
+.project
+.settings/
 target/
 build/
 doc/
+bin/
 *.*~
