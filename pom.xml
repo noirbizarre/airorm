@@ -1,0 +1,87 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>noirbizarre.info</groupId>
+  <artifactId>airorm</artifactId>
+  <packaging>swc</packaging>
+  <name>AirORM</name>
+  <version>0.2-SNAPSHOT</version>
+  <description>An ActionScript 3 ActiveRecord ORM for AIR Embedded database</description>
+  <url>https://github.com/noirbizarre/airorm</url>
+  
+  <issueManagement>
+    <url>https://github.com/noirbizarre/airorm/issues/</url>
+  </issueManagement>
+  
+  <scm>
+    <connection>scm:git:git://github.com/noirbizarre/airorm.git</connection>
+    <developerConnection>scm:git:git@github.com/noirbizarre/airorm.git</developerConnection>
+    <url>https://github.com/noirbizarre/airorm</url>
+  </scm>
+  
+  <developers>
+    <developer>
+      <id>axel</id>
+      <name>Axel H.</name>
+      <email>noirbizarre+airorm@gmail.com</email>
+      <url>http://noirbizarre.info</url>
+    </developer>
+  </developers>
+  
+  
+  <properties>
+  	<flexsdk.version>4.5.1.21328</flexsdk.version>
+  	<flexunit.version>4.1</flexunit.version>
+  	<flexmojos.version>4.0-rc2</flexmojos.version>
+  </properties>
+  
+  <build>
+  	<sourceDirectory>src/main/flex</sourceDirectory>
+  	<testSourceDirectory>src/test/flex</testSourceDirectory>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.sonatype.flexmojos</groupId>
+  			<artifactId>flexmojos-maven-plugin</artifactId>
+  			<version>${flexmojos.version}</version>
+  			<extensions>true</extensions>
+  			<configuration>
+	  			<keepAs3Metadatas>
+					<keepAs3Metadata>HasMany</keepAs3Metadata>
+					<keepAs3Metadata>ManyToMany</keepAs3Metadata>
+					<keepAs3Metadata>BelongsTo</keepAs3Metadata>
+					<keepAs3Metadata>HasOne</keepAs3Metadata>
+					<keepAs3Metadata>NotPersisted</keepAs3Metadata>
+					<keepAs3Metadata>Timestamp</keepAs3Metadata>
+				</keepAs3Metadatas>
+  			</configuration>
+  		</plugin>
+  	</plugins>
+  </build>
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>com.adobe.flex.framework</groupId>
+  		<artifactId>air-framework</artifactId>
+  		<version>${flexsdk.version}</version>
+  		<type>pom</type>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.sonatype.flexmojos</groupId>
+  		<artifactId>flexmojos-unittest-support</artifactId>
+  		<version>${flexmojos.version}</version>
+  		<type>swc</type>
+  		<scope>test</scope>
+  	</dependency>
+  </dependencies>
+  
+  <reporting>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.sonatype.flexmojos</groupId>
+  			<artifactId>flexmojos-maven-plugin</artifactId>
+  			<version>${flexmojos.version}</version>
+  		</plugin>
+  	</plugins>
+  </reporting>
+</project>
