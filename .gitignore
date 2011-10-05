@@ -1,5 +1,7 @@
 local.properties
 .project
+.actionScriptProperties
+.flexLibProperties
 .settings/
 target/
 build/
