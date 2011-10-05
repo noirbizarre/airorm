@@ -12,8 +12,7 @@
 		public function runTests():void {
 			var core:FlexUnitCore = new FlexUnitCore();
 			core.addListener( uiListener );
-			core.run( UtilsTestSuite );
-			core.run( MainTestSuite );
+			core.run( UtilsTestSuite, MainTestSuite );
 		}
 	]]>
 	</mx:Script>
