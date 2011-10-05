@@ -1,5 +1,6 @@
 package info.noirbizarre.airorm.testMain
 {
+	import org.flexunit.asserts.*;
 	import flash.data.SQLColumnSchema;
 	import flash.data.SQLConnection;
 	import flash.data.SQLTableSchema;
@@ -15,21 +16,21 @@ package info.noirbizarre.airorm.testMain
 	import info.noirbizarre.airorm.utils.DB;
 	
 	import mx.collections.ArrayCollection;
-	
-	import net.digitalprimates.fluint.tests.TestCase;
 
-	public class ORMTest extends TestCase
+	public class ORMTest
 	{	
 		private var dbFile:File;
 		private var conn:SQLConnection;
 		
-		override protected function setUp():void {
+		[Before]
+		protected function initDb():void {
 			dbFile = File.createTempFile();
 			DB.registerConnectionAlias(dbFile,"main");
 			conn = DB.getConnection("main", true);
 		}
 		
-		override protected function tearDown():void {
+		[After]
+		protected function cleanup():void {
 			DB.clear(conn);
 			conn.close();
 			if (Capabilities.os.substr(0, 3).toLowerCase() != "win") {
@@ -38,8 +39,9 @@ package info.noirbizarre.airorm.testMain
 			}
 		}
 		
-		public function testUpdateTableSimple():void {
-			var obj:SimpleActiveRecord = new SimpleActiveRecord()
+		[Test]
+		public function updateTableSimple():void {
+			var obj:SimpleActiveRecord = new SimpleActiveRecord();
 			ORM.updateTable(obj);
 			var table:SQLTableSchema = DB.getTableSchema(conn,"SimpleActiveRecords");
 			assertNotNull("Table should exists",table);
@@ -71,7 +73,8 @@ package info.noirbizarre.airorm.testMain
 			assertEquals("created column should be DATETIME","DATETIME", types["created"]);
 		}
 		
-		public function testUpdateTableSimpleByClass():void {
+		[Test]
+		public function updateTableSimpleByClass():void {
 			ORM.updateTable(SimpleActiveRecord);
 			var table:SQLTableSchema = DB.getTableSchema(conn,"SimpleActiveRecords");
 			assertNotNull("Table should exists",table);
@@ -103,7 +106,8 @@ package info.noirbizarre.airorm.testMain
 			assertEquals("created column should be DATETIME","DATETIME", types["created"]);
 		}
 		
-		public function testUpdateTableHasMany():void {
+		[Test]
+		public function updateTableHasMany():void {
 			ORM.updateTable(Employer);
 			var table:SQLTableSchema = DB.getTableSchema(conn,"Employers");
 			assertNotNull("Table should exists",table);
@@ -125,7 +129,8 @@ package info.noirbizarre.airorm.testMain
 			assertEquals("namecolumn should be VARCHAR","VARCHAR", types["name"]);
 		}
 		
-		public function testUpdateTableBelongsTo():void {
+		[Test]
+		public function updateTableBelongsTo():void {
 			ORM.updateTable(Employee);
 			var table:SQLTableSchema = DB.getTableSchema(conn,"Employees");
 			assertEquals("Table should be correctly named","Employees", table.name);
@@ -150,7 +155,8 @@ package info.noirbizarre.airorm.testMain
 			assertEquals("employer_id column should be INTEGER","INTEGER", types["employer_id"]);
 		}
 		
-		public function testUpdateTableOneToOne():void {
+		[Test]
+		public function updateTableOneToOne():void {
 			ORM.updateTable(Secretary);
 			var table:SQLTableSchema = DB.getTableSchema(conn,"Secretaries");
 			assertEquals("Table should be correctly named","Secretaries", table.name);
@@ -172,9 +178,10 @@ package info.noirbizarre.airorm.testMain
 			assertEquals("employer_id column should be INTEGER","INTEGER", types["employer_id"]);
 		}
 		
-		public function testUpdateTableManyToMany():void {
+		[Test]
+		public function updateTableManyToMany():void {
 			ORM.updateTable(Employee);
-			var table:SQLTableSchema = DB.getTableSchema(conn,"Employees");
+			//var table:SQLTableSchema = DB.getTableSchema(conn,"Employees");
 			var joinTable:SQLTableSchema = DB.getTableSchema(conn,"Task_employees__Employee_tasks");
 			if (!joinTable)
 				joinTable = DB.getTableSchema(conn,"Employee_tasks__Task_employees");
@@ -192,7 +199,8 @@ package info.noirbizarre.airorm.testMain
 			assertEquals("employee_id column should be INTEGER","INTEGER", types["employee_id"]);
 		}
 		
-		public function testUpdateSchema():void {
+		[Test]
+		public function updateSchema():void {
 			ORM.registerClass(Employee);
 			ORM.registerClass(Employer);
 			ORM.registerClass(Secretary);

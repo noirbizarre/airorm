@@ -1,5 +1,6 @@
-package info.noirbizarre.airorm.testMain
-{
+package info.noirbizarre.airorm.testMain {
+	import org.flexunit.asserts.*;
+	
 	import flash.data.SQLConnection;
 	import flash.data.SQLStatement;
 	import flash.filesystem.File;
@@ -16,15 +17,15 @@ package info.noirbizarre.airorm.testMain
 	
 	import mx.collections.ArrayCollection;
 	
-	import net.digitalprimates.fluint.tests.TestCase;
 	
 	use namespace sql_db;
 	
-	public class ActiveRecordTest extends TestCase
+	public class ActiveRecordTest
 	{
 		protected var dbFile:File;
 		
-		override protected function setUp():void {
+		[Before]
+		protected function initORM():void {
 			dbFile = File.createTempFile();
 			DB.registerConnectionAlias(dbFile,"main");
 			ORM.registerClass(Employee);
@@ -35,7 +36,8 @@ package info.noirbizarre.airorm.testMain
 			ORM.updateDB();
 		}
 		
-		override protected function tearDown():void {
+		[After]
+		protected function cleanup():void {
 			var conn:SQLConnection = DB.getConnection("main", true);
 			DB.clear(conn);
 			conn.close();
@@ -45,6 +47,7 @@ package info.noirbizarre.airorm.testMain
 			}
 		}
 		
+		[Test]
 		public function testConstructor():void {
 			var employee:Employee = new Employee();
 			assertNotNull("Should be instanciated", employee);
@@ -63,6 +66,7 @@ package info.noirbizarre.airorm.testMain
 			assertTrue("Collection must be an Array", task.employees is Array);
 		}
 		
+		[Test]
 		public function testUID():void {
 			var employee:Employee = new Employee();
 			var uid:String = employee.uid;

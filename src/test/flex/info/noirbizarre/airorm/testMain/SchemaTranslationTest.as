@@ -1,5 +1,6 @@
 package info.noirbizarre.airorm.testMain
 {
+	import org.flexunit.asserts.*;
 	import flash.utils.getQualifiedClassName;
 	
 	import info.noirbizarre.airorm.AOError;
@@ -9,13 +10,12 @@ package info.noirbizarre.airorm.testMain
 	import info.noirbizarre.airorm.testData.SimpleClass;
 	import info.noirbizarre.airorm.testData.Task;
 	
-	import net.digitalprimates.fluint.tests.TestCase;
-
-	public class SchemaTranslationTest extends TestCase
+	public class SchemaTranslationTest
 	{
 		private static var st:SchemaTranslation = new SchemaTranslation();
 		
-		public function testGetTable():void {
+		[Test]
+		public function getTable():void {
 			var simpleAR:SimpleActiveRecord = new SimpleActiveRecord();
 			assertEquals("Table name should be the plural form of class name","SimpleActiveRecords",st.getTable(simpleAR.className));
 			assertEquals("Table name should be the plural form of class name","SimpleActiveRecords",st.getTable(simpleAR));
@@ -29,14 +29,16 @@ package info.noirbizarre.airorm.testMain
 			assertTrue("Should have failed",errorThrown);
 		}
 		
-		public function testGetPrimaryKey():void {
+		[Test]
+		public function getPrimaryKey():void {
 			var simpleAR:SimpleActiveRecord = new SimpleActiveRecord();
 			assertEquals("Default primary key should be 'id'","id",st.getPrimaryKey(simpleAR.className));
 			assertEquals("Default primary key should be 'id'","id",st.getPrimaryKey(simpleAR));
 			assertEquals("Default primary key should be 'id'","id",st.getPrimaryKey(SimpleActiveRecord));
 		}
 		
-		public function testGetForeignKey():void {
+		[Test]
+		public function getForeignKey():void {
 			var simpleAR:SimpleActiveRecord = new SimpleActiveRecord();
 			var emp:Employee = new Employee();
 			assertEquals("Default foreign key should be 'simpleActiveRecord_id'","simpleActiveRecord_id",st.getForeignKey(simpleAR));
@@ -57,7 +59,8 @@ package info.noirbizarre.airorm.testMain
 			assertTrue("Should have failed",errorThrown);
 		}
 		
-		public function testGetJoinTable():void {
+		[Test]
+		public function getJoinTable():void {
 			var task:Task = new Task();
 			var employee:Employee = new Employee();
 			assertEquals("should match the class1_prop1__class2_prop2","Employee_tasks__Task_employees", st.getJoinTable(Employee, "tasks", Task, "employees"));
@@ -65,18 +68,21 @@ package info.noirbizarre.airorm.testMain
 			assertEquals("should match the class1_prop1__class2_prop2","Employee_tasks__Task_employees", st.getJoinTable("Employee", 'tasks', "Task", "employees"));
 		}
 		
-		public function testGetField():void {
+		[Test]
+		public function getField():void {
 			assertEquals("Should returns the property name","myPropertie",st.getField("myPropertie"));
 		}
 		
-		public function testGetCreatedField():void {
+		[Test]
+		public function getCreatedField():void {
 			var simpleAR:SimpleActiveRecord = new SimpleActiveRecord();
 			var employee:Employee = new Employee();
 			assertEquals("Should be 'created'","created",st.getCreatedField(simpleAR));
 			assertNull("Should not have 'created' field",st.getCreatedField(employee));
 		}
 		
-		public function testGetModifiedField():void {
+		[Test]
+		public function getModifiedField():void {
 			var simpleAR:SimpleActiveRecord = new SimpleActiveRecord();
 			var employee:Employee = new Employee();
 			assertEquals("Should be 'modified'","modified",st.getModifiedField(simpleAR));

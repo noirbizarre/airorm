@@ -1,21 +1,22 @@
 package info.noirbizarre.airorm.testUtils
 {
+	import org.flexunit.asserts.*;
 	import flash.utils.getQualifiedClassName;
 	
 	import info.noirbizarre.airorm.testData.SimpleClass;
 	import info.noirbizarre.airorm.utils.Reflection;
-	
-	import net.digitalprimates.fluint.tests.TestCase;
 
-	public class ReflectionTest extends TestCase
+	public class ReflectionTest
 	{
 		private var obj:SimpleClass;
 		
-		override protected function setUp():void {
+		[Before]
+		protected function setUp():void {
 			obj = new SimpleClass();
 		}
 		
-		public function testDescribe():void {
+		[Test]
+		public function describe():void {
 			var description:XML = Reflection.describe(obj);
 			assertTrue("Should give ancestor class", description.extendsClass.@type == "Object");
 			assertTrue("Should list all public variables", description.variable.length() == 2);
@@ -23,7 +24,8 @@ package info.noirbizarre.airorm.testUtils
 			assertTrue("Should give the correct type", description.variable.(@name == "myPublicVar").@type == "String");
 		}
 		
-		public function testDescribeClass():void {
+		[Test]
+		public function describeClass():void {
 			var description:XML = Reflection.describe(SimpleClass);
 			assertTrue("Should give ancestor class", description.extendsClass.@type == "Object");
 			assertTrue("Should list all public variables", description.variable.length() == 2);
@@ -31,7 +33,8 @@ package info.noirbizarre.airorm.testUtils
 			assertTrue("Should give the correct type", description.variable.(@name == "myPublicVar").@type == "String");
 		}
 		
-		public function testGetMember():void {
+		[Test]
+		public function getMember():void {
 			var member:XML = Reflection.getMember(obj,"myPublicVar");
 			var expected:XML = <variable name="myPublicVar" type="String"/>;
 			assertEquals("Should return the correct member",expected,member);
@@ -43,7 +46,8 @@ package info.noirbizarre.airorm.testUtils
 			assertEquals("Should return the correct member with all its descendants",expected,member);
 		}
 		
-		public function testGetMetadata():void {
+		[Test]
+		public function getMetadata():void {
 			var metadata:XMLList = Reflection.getMetadata(obj,"TestMetadata");
 			var expected:XMLList = new XMLList();
 			expected += <metadata name="TestMetadata">
@@ -54,7 +58,8 @@ package info.noirbizarre.airorm.testUtils
 			assertEquals("Should return the XMLList TestMedata",expected,metadata);
 		}
 		
-		public function testGetByMetadata():void {
+		[Test]
+		public function getByMetadata():void {
 			var metadata:XMLList = Reflection.getByMetadata(obj,"TestMetadata");
 			var expected:XMLList = XMLList(<variable name="myOtherVar" type="String">
 			    <metadata name="TestMetadata"/>
@@ -62,7 +67,8 @@ package info.noirbizarre.airorm.testUtils
 			assertEquals("Should return the XMLList of members containing TestMedata",expected,metadata);
 		}
 		
-		public function testGetMetadataByArg():void {
+		[Test]
+		public function getMetadataByArg():void {
 			var metadata:XMLList = Reflection.getMetadataByArg(obj,"param", "TestParam");
 			var expected:XMLList = XMLList(<metadata name="TestMetadata">
 				<arg key="" value ="Test"/>
@@ -73,7 +79,8 @@ package info.noirbizarre.airorm.testUtils
 			assertEquals("Should return the XMLList of members containing TestMedata",expected,metadata);
 		}
 		
-		public function testGetShortClassName():void {
+		[Test]
+		public function getShortClassName():void {
 			assertEquals("Should returns the last part of class name", "SimpleClass", Reflection.getShortClassName(SimpleClass));
 			assertEquals("Should returns the last part of class name", "SimpleClass", Reflection.getShortClassName(new SimpleClass()));
 			assertEquals("Should returns the last part of class name", "SimpleClass", Reflection.getShortClassName(getQualifiedClassName(new SimpleClass())));

@@ -1,16 +1,12 @@
 package info.noirbizarre.airorm.testMain
 {	
-	import net.digitalprimates.fluint.tests.TestSuite;
-
-	public class MainTestSuite extends TestSuite
+	[Suite]
+	[RunWith("org.flexunit.runners.Suite")]
+	public class MainTestSuite
 	{
-		public function MainTestSuite()
-		{
-			addTestCase( new SchemaTranslationTest() );
-			addTestCase( new ORMTest() );
-			addTestCase( new RelationalOperationTest() );
-			addTestCase( new ActiveRecordTest() );
-		}
-		
+		public var schemaTranslationTest:SchemaTranslationTest;
+		public var ormTest:ORMTest;
+		public var relationalOperationTest:RelationalOperationTest;
+		public var activeRecordTest:ActiveRecordTest;
 	}
 }

@@ -1,5 +1,6 @@
-package info.noirbizarre.airorm.testMain
-{
+package info.noirbizarre.airorm.testMain {
+	
+	import org.flexunit.asserts.*;
 	import flash.data.SQLConnection;
 	import flash.filesystem.File;
 	import flash.system.Capabilities;
@@ -14,14 +15,13 @@ package info.noirbizarre.airorm.testMain
 	import info.noirbizarre.airorm.testData.SimpleClass;
 	import info.noirbizarre.airorm.testData.Task;
 	import info.noirbizarre.airorm.utils.DB;
-	
-	import net.digitalprimates.fluint.tests.TestCase;
 
-	public class RelationalOperationTest extends TestCase
+	public class RelationalOperationTest
 	{
 		protected var dbFile:File;
 		
-		override protected function setUp():void {
+		[Before]
+		protected function initORM():void {
 			dbFile = File.createTempFile();
 			DB.registerConnectionAlias(dbFile,"main");
 			ORM.registerClass(Employee);
@@ -32,7 +32,8 @@ package info.noirbizarre.airorm.testMain
 			ORM.updateDB();
 		}
 		
-		override protected function tearDown():void {
+		[After]
+		protected function cleanup():void {
 			var conn:SQLConnection = DB.getConnection("main", true);
 			DB.clear(conn);
 			conn.close();
@@ -42,7 +43,8 @@ package info.noirbizarre.airorm.testMain
 			}
 		}
 		
-		public function testConstructorFromClass():void {
+		[Test]
+		public function constructorFromClass():void {
 			// Test hasOne RelationalOperation from class
 			var ro:RelationalOperation = new RelationalOperation(Secretary, 'employer');
 			assertNotNull("RelationalOperation should be instanciated", ro);
@@ -73,7 +75,8 @@ package info.noirbizarre.airorm.testMain
 			assertTrue("Should have failed",errorThrown);
 		}
 		
-		public function testConstructorFromString():void {
+		[Test]
+		public function constructorFromString():void {
 			// Test hasOne RelationalOperation
 			var ro:RelationalOperation = new RelationalOperation("Secretary", "employer");
 			assertNotNull("RelationalOperation should be instanciated", ro);
@@ -104,7 +107,8 @@ package info.noirbizarre.airorm.testMain
 			assertTrue("Should have failed",errorThrown);
 		}
 		
-		public function testConstructorFromInstance():void {
+		[Test]
+		public function constructorFromInstance():void {
 			// Test hasOne RelationalOperation
 			var ro:RelationalOperation = new RelationalOperation(new Secretary(), 'employer');
 			assertNotNull("RelationalOperation should be instanciated", ro);
@@ -135,23 +139,28 @@ package info.noirbizarre.airorm.testMain
 			assertTrue("Should have failed",errorThrown);
 		}
 		
-		public function testLoadRelated():void {
+		[Test]
+		public function loadRelated():void {
 			fail("No test implemented");
 		}
 		
+		[Test]
 		public function countConstructor():void {
 			fail("No test implemented");
 		}
 		
-		public function testSaveRelated():void {
+		[Test]
+		public function saveRelated():void {
 			fail("No test implemented");
 		}
 		
-		public function testDeleteRelated():void {
+		[Test]
+		public function deleteRelated():void {
 			fail("No test implemented");
 		}
 		
-		public function testMergeConditions():void {
+		[Test]
+		public function mergeConditions():void {
 			fail("No test implemented");
 		}
 		

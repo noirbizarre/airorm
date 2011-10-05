@@ -1,5 +1,6 @@
 package info.noirbizarre.airorm.testUtils
 {
+	import org.flexunit.asserts.*;
 	import flash.data.SQLConnection;
 	import flash.data.SQLSchemaResult;
 	import flash.data.SQLStatement;
@@ -9,36 +10,39 @@ package info.noirbizarre.airorm.testUtils
 	import info.noirbizarre.airorm.AOError;
 	import info.noirbizarre.airorm.utils.DB;
 	
-	import net.digitalprimates.fluint.tests.TestCase;
-
-	public class DBTest extends TestCase
+	public class DBTest
 	{	
 		private var dbFile:File;
 		
-		override protected function setUp():void {
+		[Before]
+		protected function init():void {
 			dbFile = File.createTempFile();
 		}
 		
-		override protected function tearDown():void {
+		[After]
+		protected function cleanup():void {
 			 if (Capabilities.os.substr(0, 3).toLowerCase() != "win") {
 			 	// Crash on windows
 				dbFile.deleteFile();
 			 }
 		} 
 		
-		public function testGetConnection():void {
+		[Test]
+		public function getConnection():void {
 			DB.registerConnectionAlias(dbFile,"other");
 			assertEquals("Second call should returns the cached connection",DB.getConnection("other", true), DB.getConnection("other", true));
 		}
 		
-		public function testRegisterConnectionAlias():void {
+		[Test]
+		public function registerConnectionAlias():void {
 			DB.registerConnectionAlias(dbFile,"other");
 			assertNotNull("New alias should be registered", DB.getConnection("other",true));
 			assertEquals("Second call should returns the cached connection",DB.getConnection("other",true),DB.getConnection("other",true));
 			DB.getConnection("other").close();
 		}
 		
-		public function testGetSchema():void {
+		[Test]
+		public function getSchema():void {
 			var conn:SQLConnection = new SQLConnection();
 			conn.open(dbFile);
 			assertNull("Schema for empty database is null", DB.getSchema(conn));
@@ -57,7 +61,8 @@ package info.noirbizarre.airorm.testUtils
 			assertTrue("Should have failed",errorThrown);
 		}
 		
-		public function testGetTableSchema():void {
+		[Test]
+		public function getTableSchema():void {
 			var conn:SQLConnection = new SQLConnection();
 			conn.open(dbFile);
 			assertNull("Schema for non existant table is null", DB.getTableSchema(conn, "test"));
@@ -69,7 +74,8 @@ package info.noirbizarre.airorm.testUtils
 			conn.close();
 		}
 		
-		public function testRefreshSchema():void {
+		[test]
+		public function refreshSchema():void {
 			DB.registerConnectionAlias(dbFile,"other");
 			var conn:SQLConnection = DB.getConnection("other", true);
 			var schema:SQLSchemaResult = DB.getSchema(conn);
@@ -94,7 +100,8 @@ package info.noirbizarre.airorm.testUtils
 			assertTrue("Should have failed",errorThrown);
 		}
 		
-		public function testReopenConnection():void {
+		[Test]
+		public function reopenConnection():void {
 			DB.registerConnectionAlias(dbFile,"other");
 			var conn:SQLConnection = DB.getConnection("other", true);
 			conn.close();
